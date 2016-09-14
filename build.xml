@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="SeleniumTest">
+    <property environment="env"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="Web App Libraries.libraryclasspath"/>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="../../.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+    </path>
+    <path id="SeleniumTest.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="Web App Libraries.libraryclasspath"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/apache-mime4j-0.6.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/bsh-2.0b4.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/cglib-nodep-2.1_3.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/commons-codec-1.10.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/commons-exec-1.3.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/commons-io-2.4.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/commons-logging-1.2.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/gson-2.3.1.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/guava-19.0.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/hamcrest-core-1.3.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/hamcrest-library-1.3.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/httpclient-4.5.1.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/httpcore-4.4.3.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/httpmime-4.5.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/jcommander-1.48.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/jna-4.1.0.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/jna-platform-4.1.0.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/netty-3.5.7.Final.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/phantomjsdriver-1.2.1.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/testng-6.9.9.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/selenium-java-2.53.1.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/selenium-java-2.53.1-srcs.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/Selenium jar files/libs/selenium-server-standalone-3.0.0-beta2.jar"/>
+        <pathelement location="../../Desktop/RL_Automation_EtoE/DynamicsUIAutomation.jar"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="SeleniumTest.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="MicroSoftDynamicsRecTS">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="dynamics.testauto.scripts.MicroSoftDynamicsRecTS" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="SeleniumTest.classpath"/>
+        </junit>
+    </target>
+              	<junit printsummary="yes" haltonfailure="yes">
+              	    <classpath>
+              	        <path refid="SeleniumTest.classpath" />
+              	        <fileset dir="${junit.dir}">
+              	            <include name="**/junit.jar" />
+              	        </fileset>
+              	    </classpath>
+              	    
+              	</junit>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>
