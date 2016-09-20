@@ -42,7 +42,7 @@ public class VerifyZendeskTicket {
 		enterEmail();
 		enterPassword();
 		clickLogin();
-		chooseTicket("target2");
+		chooseTicket("Zendesk Ticket UI Sep22");
 		clickReplayLink();
 		waits.waitLoop(driver, By.id("rcrsv-replay-video_html5_api"));
 		clickReplayButton();

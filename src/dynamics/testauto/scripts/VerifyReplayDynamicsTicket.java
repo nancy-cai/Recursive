@@ -113,7 +113,7 @@ public class VerifyReplayDynamicsTicket {
 					.click();
 			driver.findElement(By
 					.xpath("/html/body/div/div[1]/table/tbody/tr/td/span/table/tbody/tr/td[3]/table/tbody/tr/td[1]/div[2]/input"))
-					.sendKeys("Dynamics Ticket UI AUG31");
+					.sendKeys("Dynamics Ticket UI Sep22");
 
 			driver.findElement(By
 					.xpath("/html/body/div/div[1]/table/tbody/tr/td/span/table/tbody/tr/td[3]/table/tbody/tr/td[2]/a[1]"))

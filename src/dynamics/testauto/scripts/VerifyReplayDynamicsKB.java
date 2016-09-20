@@ -103,14 +103,14 @@ public class VerifyReplayDynamicsKB {
 
 		driver.switchTo().frame(driver.findElement(By.id("WebResource_PersonalWall")));
 
-		if (driver.findElement(By.linkText("Replay-Dynamics UI SEP31")).isDisplayed()) {
+		if (driver.findElement(By.linkText("Replay-Dynamics UI SEP22")).isDisplayed()) {
 			System.out.println("Found the replay instance..");
 			Thread.sleep(3000);
 			Robot uiBtn = new Robot();
 			uiBtn.mouseMove(2180, 808);
 			Thread.sleep(5000);
 
-			WebElement replayCase = driver.findElement(By.linkText("Replay-Dynamics UI SEP31"));
+			WebElement replayCase = driver.findElement(By.linkText("Replay-Dynamics UI SEP22"));
 			// WebElement replayCase =
 			// driver.findElement(By.xpath("html/body/div[1]/div[1]/div[8]/div[2]/div[2]/div[1]"));
 			/// html/body/div[1]/div[1]/div[8]/div[2]/div[2]/div[1]
