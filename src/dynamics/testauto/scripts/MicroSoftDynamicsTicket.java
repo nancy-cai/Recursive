@@ -1,14 +1,12 @@
-package saleforce.testauto.scripts;
+
+package dynamics.testauto.scripts;
 
 import static org.junit.Assert.fail;
 
-//import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
-import javax.swing.JOptionPane;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,11 +19,11 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.Select;
 
-public class RecordSalesforceTicketTC {
+public class MicroSoftDynamicsTicket {
 	private WebDriver driver;
 	private String baseUrl;
 	private boolean acceptNextAlert = true;
@@ -34,36 +32,22 @@ public class RecordSalesforceTicketTC {
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:/Selenium/Chrome/chromedriver.exe");
-
-		// working plugin installer
-
-		ChromeOptions options = new ChromeOptions();
-
-		options.addArguments("load-extension=//ags01/Public/RecursiveLabs/Chrome Extention/extension");
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-		driver = new ChromeDriver(capabilities);
+		driver = new ChromeDriver();
 		driver.manage().window().maximize();
-		JOptionPane.showMessageDialog(null, "Please click on the Cancel button and manually select a Salesforce UI.");
 
-		baseUrl = "http://www.target.com/c/movies-music-books/-/N-5xsx0";
-		driver.manage().timeouts().implicitlyWait(400, TimeUnit.SECONDS);
+		baseUrl = "http://testpages.clickwith.me/testpage.html";
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void test() throws Exception {
-
+	public void testMicroSoftDynamicsRecTS() throws Exception {
 		driver.get(baseUrl);
-
+		new Select(driver.findElement(By.id("ui"))).selectByVisibleText("dynamics-replay-ticket");
 		Thread.sleep(3000);
+		driver.findElement(By.id("save")).click();
+		Thread.sleep(6000);
 
-		if (driver.findElement(By.xpath("/html/body/div[2]/div[4]/div/div[1]")).isDisplayed()) {
-			System.out.println("Found the nearest location to the coordinates...");
-
-			driver.manage().timeouts().implicitlyWait(120, TimeUnit.SECONDS);
-			Thread.sleep(6000);
-		}
-
+		// Switch to the frame with the Recursive Button
 		driver.switchTo().frame(driver.findElement(By.id("recursive-social-plugin")));
 
 		WebElement temp = driver.findElement(By.xpath("//div[contains(@title, 'Replay by Recursive Labs')]"));
@@ -95,6 +79,11 @@ public class RecordSalesforceTicketTC {
 			System.out.println("Recording has started..wait for the audio record to finish initialising..");
 
 			Thread.sleep(3000);
+			Thread.sleep(3000);
+			Thread.sleep(3000);
+
+			Thread.sleep(6000);
+			Thread.sleep(6000);
 
 			ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
 			for (int i = 0; i < tabs2.size(); i++) {
@@ -119,44 +108,96 @@ public class RecordSalesforceTicketTC {
 					minAudioWin);/* setPosition(new Point(-2000, 0)); */
 
 			driver.switchTo().window(tabs2.get(0));
-
 		}
+		Thread.sleep(3000);
+
+		Actions builders1 = new Actions(driver);
+		builders1
+				.moveToElement(
+						driver.findElement(By.cssSelector("#sidebar > ul > li.active > ul > li:nth-child(1) > a")))
+				.build().perform();
+		builders1.click().build().perform();
+		Thread.sleep(3000);
+
+		Actions builders3 = new Actions(driver);
+		builders3
+				.moveToElement(
+						driver.findElement(By.cssSelector("#sidebar > ul > li.active > ul > li:nth-child(3) > a")))
+				.build().perform();
+		builders3.click().build().perform();
 
 		Thread.sleep(3000);
 
-		if (driver.findElement(By.cssSelector("#COMPONENT-55785 > ul > li:nth-child(4) > a")).isDisplayed()) {
-
-			System.out.println("Action and Adventure FOUND!");
-			Thread.sleep(3000);
-			WebElement recurButtton = driver.findElement(By.cssSelector("#COMPONENT-55785 > ul > li:nth-child(4) > a"));
-			Actions action3 = new Actions(driver);
-
-			action3.moveToElement(recurButtton).build().perform();
-			action3.click(recurButtton).build().perform();
-
-		}
-
-		driver.findElement(By.xpath(".//*[@id='js-filterContainer']/ul/li[1]/section/div[2]/a/span[1]")).click();
+		Actions builders5 = new Actions(driver);
+		builders5
+				.moveToElement(
+						driver.findElement(By.cssSelector("#sidebar > ul > li.active > ul > li:nth-child(5) > a")))
+				.build().perform();
+		builders5.click().build().perform();
 		Thread.sleep(3000);
 
-		if (driver.findElement(By.id("searchLabel")).isDisplayed()) {
-			System.out.println("Found the search box...");
+		Actions builders6 = new Actions(driver);
+		builders6.moveToElement(driver.findElement(By.cssSelector("#sidebar > ul > li:nth-child(2) > a"))).build()
+				.perform();
+		builders6.click().build().perform();
 
+		Thread.sleep(3000);
+
+		driver.switchTo().frame(driver.findElement(By.xpath("/html/body/iframe[4]")));
+
+		WebElement annotFrame = driver.findElement(By.cssSelector("#rcrsv-annotation-toolbar"));
+		// #rcrsv-annotation-toolbar
+		if (annotFrame.isDisplayed()) {
+			System.out.println("annotation frame FOUND..");
+			driver.findElement(By.id("atb-button-rectangle")).click();// rectangle
+
+			ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
+			for (int i = 0; i < tabs2.size(); i++) {
+				System.out.println("tabs now after clicking annotation --> " + i);
+			}
 			Thread.sleep(3000);
-			driver.findElement(By.id("searchLabel")).click();
-			driver.findElement(By.id("search")).clear();
 
-			driver.findElement(By.id("search")).sendKeys("project almanac");
-			Thread.sleep(3000);
+			// Back to main page to draw
+			driver.switchTo().window(tabs2.get(0));
 
-			driver.findElement(By.xpath("(//button[@id='searchReset'])[2]")).click();
+			WebElement element = driver.findElement(By.cssSelector("#settings"));
+			if (element.isDisplayed()) {
+				System.out.println("Back to main page to draw..");
 
-			Thread.sleep(3000);
+				Actions recPen = new Actions(driver);
+				Action drawRecAction = recPen.moveToElement(element, 330, 195).clickAndHold().moveByOffset(744, 370)
+						.moveByOffset(295, 514).release().build();
+				drawRecAction.perform();
+
+				Thread.sleep(8000);
+
+			}
+			driver.switchTo().frame(driver.findElement(By.xpath("/html/body/iframe[4]")));// again
+
+			WebElement annotFrame2 = driver.findElement(By.cssSelector("#rcrsv-annotation-toolbar"));
+			// #rcrsv-annotation-toolbar
+			if (annotFrame2.isDisplayed()) {
+				System.out.println("change to arrow..");
+				driver.findElement(By.id("atb-button-arrow")).click();// --->
+				// Back to main page to draw
+				driver.switchTo().window(tabs2.get(0));
+
+				WebElement elementOfOrigin = driver.findElement(
+						By.cssSelector("body > div.container > div:nth-child(2) > div.col-md-9 > blockquote > p"));
+				if (element.isDisplayed()) {
+					Actions arrowPen = new Actions(driver);
+					Action drawArrowAction = arrowPen.moveToElement(elementOfOrigin, 600, 150).clickAndHold()
+							.moveByOffset(135, 15).release().build();
+					drawArrowAction.perform();
+				}
+			}
+
+			Thread.sleep(10000);
 
 		}
 
-		// Switch to the frame with the Recursive Button to STOP the recording
-
+		// Stopping the recording
+		// Switch to the frame with the Recursive Button
 		System.out.println("Switching to the Recursive Frame..");
 		driver.switchTo().frame(driver.findElement(By.id("recursive-social-plugin")));
 
@@ -166,43 +207,42 @@ public class RecordSalesforceTicketTC {
 			WebElement stopRec = driver.findElement(By.linkText("Stop"));
 			Actions actionStopRec = new Actions(driver);
 			actionStopRec.moveToElement(stopRec).build().perform();
-
+			// driver.manage().timeouts().implicitlyWait(90, TimeUnit.SECONDS);
 			Robot uiBtnStop = new Robot();
 			uiBtnStop.mouseMove(190, 1670);
-
 			Thread.sleep(3000);
 			actionStopRec.click(stopRec).build().perform();
 
+			Thread.sleep(3000);
+			// Summary
 			if (driver.findElement(By.xpath("//input[contains(@class, 'summary-input form-control input-sm')]"))
 					.isDisplayed()) {
-				System.out.println("Found the title input holder..");
+				System.out.println("Found the summary input holder..");
 				driver.findElement(By.xpath("//input[contains(@class, 'summary-input form-control input-sm')]"))
-						.sendKeys("Replay-Salesforce UI2");
+						.sendKeys("Dynamics Ticket UI AUG31");
+				Thread.sleep(3000);
+			}
+			// Details
+			if (driver.findElement(By.xpath("//textarea[contains(@class, 'details-input form-control input-sm')]"))
+					.isDisplayed()) {
+				System.out.println("Found the details input holder..");
+				driver.findElement(By.xpath("//textarea[contains(@class, 'details-input form-control input-sm')]"))
+						.sendKeys("Sample Replay recording for Dynamics Ticket UI.");
 				Thread.sleep(3000);
 			}
 
-			driver.findElement(By.xpath("//input[contains(@class, 'name-input form-control input-sm')]"))
-					.sendKeys("Nancy");
-			driver.findElement(By.xpath("//input[contains(@class, 'email-input form-control input-sm')]"))
-					.sendKeys("test@gmail.com");
-
-			System.out.println("Checking if the rendering has finished..");
-
-			if (driver.findElement(By.cssSelector("body > div > a.btn.btn-success.btn-xs.sharing-button"))
+			// Email
+			if (driver.findElement(By.xpath("//input[contains(@class, 'email-input form-control input-sm')]"))
 					.isDisplayed()) {
-
-				System.out.println("Found the save button..checking if currently enabled..");
-				if (driver.findElement(By.cssSelector("body > div > a.btn.btn-success.btn-xs.sharing-button"))
-						.isEnabled()) {
-					System.out.println("Is Enabled..");
-				} else {
-					System.out.println("Disabled at this time..");
-				}
+				System.out.println("Found the email input holder..");
+				driver.findElement(By.xpath("//input[contains(@class, 'email-input form-control input-sm')]"))
+						.sendKeys("jone@email.com");
+				Thread.sleep(3000);
 			}
 
+			System.out.println("renderingProgress in progress..");
 			WebElement renderingProgress = driver
 					.findElement(By.xpath("//div[contains(@class, 'progress-bar progress-bar-striped active')]"));
-
 			boolean submitBtnAppears = false;
 			while (!submitBtnAppears) {
 				String progressBar = "";
@@ -216,7 +256,7 @@ public class RecordSalesforceTicketTC {
 							|| progressBar.equalsIgnoreCase("99% rendered")) {
 
 						System.out.println("renderingProgress is 100% exiting loop");
-
+						Thread.sleep(6000);
 						WebElement previewbuttonAppears = driver
 								.findElement(By.cssSelector("button[class='btn btn-xs btn-primary btnPreviewVideo']"));
 						if (previewbuttonAppears.isDisplayed()) {
@@ -224,6 +264,11 @@ public class RecordSalesforceTicketTC {
 							rendFinish = true;
 							submitBtnAppears = true;
 							break;
+
+						}
+						if (driver.findElement(By.linkText("Submit Ticket")).isDisplayed()) {
+							System.out.println("Submit button enabled..");
+
 						}
 
 					}
@@ -237,25 +282,27 @@ public class RecordSalesforceTicketTC {
 			}
 
 			if (submitBtnAppears) {
+				System.out.println("Submit button enabled..");
+				Thread.sleep(1000);
 
 				driver.findElement(By.linkText("Submit Ticket")).click();
 
 			}
-			Thread.sleep(5000);
+			Thread.sleep(9000);
+			Thread.sleep(3000);
+			Thread.sleep(3000);
 
 			System.out.println("Submitted dialog box appears..");
 			Robot submittedDialogBox = new Robot();
 			submittedDialogBox.keyPress(KeyEvent.VK_ENTER);
-			Thread.sleep(3000);
+			Thread.sleep(2000);
 
-			System.out.println("Replay has been submitted.");
 		}
 
 	}
 
 	@After
 	public void tearDown() throws Exception {
-
 		driver.quit();
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {

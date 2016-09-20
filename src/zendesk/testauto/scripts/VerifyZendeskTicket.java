@@ -3,9 +3,11 @@ package zendesk.testauto.scripts;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,6 +22,8 @@ public class VerifyZendeskTicket {
 	private WebElement password;
 	private WebElement login;
 	private List<WebElement> summary;
+	private WebElement replayLink;
+	private WebElement video;
 
 	@Before
 	public void setUp() throws Exception {
@@ -28,16 +32,26 @@ public class VerifyZendeskTicket {
 		baseUrl = "https://recursivelabsdev.zendesk.com/agent/dashboard";
 		driver.get(baseUrl);
 		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
+		waits = new WaitLoopFunction();
 		switchIFrame();
 		enterEmail();
 		enterPassword();
 		clickLogin();
-		chooseTicket("target");
+		chooseTicket("target2");
+		clickReplayLink();
+		waits.waitLoop(driver, By.id("rcrsv-replay-video_html5_api"));
+		clickReplayButton();
+
+	}
+
+	@After
+	public void close() {
+		driver.close();
 	}
 
 	private void switchIFrame() {
@@ -69,8 +83,21 @@ public class VerifyZendeskTicket {
 				smr.click();
 				break;
 			}
-
 		}
+	}
+
+	private void clickReplayLink() throws Exception {
+		replayLink = driver.findElement(By.xpath("//div[@class='zd-comment']/p/a"));
+		driver.get(replayLink.getAttribute("href"));
+
+	}
+
+	private void clickReplayButton() throws Exception {
+
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("document.getElementById(\"rcrsv-replay-video_html5_api\").play()");
+		Thread.sleep(10000);
+
 	}
 
 }

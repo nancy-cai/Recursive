@@ -1,4 +1,3 @@
-
 package dynamics.testauto.scripts;
 
 import static org.junit.Assert.fail;
@@ -23,7 +22,7 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
-public class MicroSoftDynamicsTickectUITS {
+public class MicroSoftDynamicsKB {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
@@ -42,7 +41,7 @@ public class MicroSoftDynamicsTickectUITS {
   @Test
   public void testMicroSoftDynamicsRecTS() throws Exception {
     driver.get(baseUrl);
-    new Select(driver.findElement(By.id("ui"))).selectByVisibleText("dynamics-replay-ticket");
+    new Select(driver.findElement(By.id("ui"))).selectByVisibleText("dynamics-replay-kb");
     Thread.sleep(3000);
     driver.findElement(By.id("save")).click();
     Thread.sleep(6000);
@@ -54,21 +53,21 @@ public class MicroSoftDynamicsTickectUITS {
     //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@title, 'Replay by Recursive Labs')]")));
     
     if(temp.isDisplayed()){
-    	System.out.println("Salesforce button appeared!");
-    	WebElement recurButtton = driver.findElement(By.xpath("//div[contains(@class, 'branding-logo')]"));
+       System.out.println("MS button appeared!");
+       WebElement recurButtton = driver.findElement(By.xpath("//div[contains(@class, 'branding-logo')]"));
     	
-    	Actions action3 = new Actions(driver);
+       Actions action3 = new Actions(driver);
     	
-    	action3.moveToElement(recurButtton).build().perform();
-	 	   Robot uiBtn = new Robot();
-	 	   uiBtn.mouseMove(95,1640); 
+       action3.moveToElement(recurButtton).build().perform();
+	   Robot uiBtn = new Robot();
+	   uiBtn.mouseMove(95,1640); 
 
-    	//driver.manage().timeouts().implicitlyWait(90, TimeUnit.SECONDS);
-	    Thread.sleep(3000); 
- 	    action3.click(recurButtton).build().perform();
+       //driver.manage().timeouts().implicitlyWait(90, TimeUnit.SECONDS);
+	   Thread.sleep(3000); 
+ 	   action3.click(recurButtton).build().perform();
  	    
  	   //Thread.sleep(6000);
- 	   System.out.println("Salesforce button clicked!");
+ 	   System.out.println("MS button clicked!");
    	   WebElement startRec = driver.findElement(By.linkText("Start Recording"));   	    	   
    	   Actions action4 = new Actions(driver);
  	    
@@ -82,13 +81,12 @@ public class MicroSoftDynamicsTickectUITS {
 	       
 	       System.out.println("Recording has started..wait for the audio record to finish initialising..");
 	       //driver.manage().timeouts().implicitlyWait(200, TimeUnit.SECONDS);
-	       Thread.sleep(3000); 
-	       Thread.sleep(3000); 
-	       Thread.sleep(3000); 
+	       Thread.sleep(9000); 
+	        
 	       //added today because of slow internet
+	       /*Thread.sleep(6000); 
 	       Thread.sleep(6000); 
-	       Thread.sleep(6000); 
-	       //Thread.sleep(3000); 
+	       Thread.sleep(3000);*/ 
 	  
 	       //driver.switchTo().frame(driver.findElement(By.id("recursive-social-plugin")));
 	       
@@ -106,13 +104,11 @@ public class MicroSoftDynamicsTickectUITS {
 	       //driver.switchTo().alert().accept();
 	       Robot uiBtn3 = new Robot();
 	       uiBtn3.mouseMove(180,300);
-	       Thread.sleep(3000); 
-	       Thread.sleep(3000); 
-	       
+	       Thread.sleep(6000); 
+	      	       
 	 	   Robot audioDialogBox = new Robot();
 	 	   audioDialogBox.keyPress(KeyEvent.VK_ENTER);
-	 	   Thread.sleep(3000); 
-	 	   Thread.sleep(3000);
+	 	   Thread.sleep(6000); 	 	   
 	 	   Point minAudioWin = new Point(2000, 1000);
 	 	   driver.manage().window().setPosition(minAudioWin);/* setPosition(new Point(-2000, 0));*/
 	 	   
@@ -153,9 +149,9 @@ public class MicroSoftDynamicsTickectUITS {
 	builders6.moveToElement(driver.findElement(By.cssSelector("#sidebar > ul > li:nth-child(2) > a"))).build().perform();
 	builders6.click().build().perform();
 	
-    Thread.sleep(3000);  
+    Thread.sleep(6000);  
     //driver.findElement(By.xpath("(//a[contains(text(),'Components')])[2]")).click();
-    Thread.sleep(3000);  
+    //Thread.sleep(3000);  
     
     
     
@@ -243,25 +239,11 @@ public class MicroSoftDynamicsTickectUITS {
 	    	   actionStopRec.click(stopRec).build().perform();   
 	    	   
 	    	   Thread.sleep(3000);
-	    	   //Summary
-	    	   if(driver.findElement(By.xpath("//input[contains(@class, 'summary-input form-control input-sm')]")).isDisplayed()){
-    	    		 System.out.println("Found the summary input holder..");
-    	    		 driver.findElement(By.xpath("//input[contains(@class, 'summary-input form-control input-sm')]")).sendKeys("Dynamics Ticket UI AUG31");
+	    	   if(driver.findElement(By.xpath("//input[contains(@class, 'title-input form-control input-sm')]")).isDisplayed()){
+    	    		 System.out.println("Found the title input holder..");
+    	    		 driver.findElement(By.xpath("//input[contains(@class, 'title-input form-control input-sm')]")).sendKeys("Replay-Dynamics UI SEP31");
     	    		Thread.sleep(3000); 
     	       }
-	    	   //Details
-	    	   if(driver.findElement(By.xpath("//textarea[contains(@class, 'details-input form-control input-sm')]")).isDisplayed()){
-  	    		 System.out.println("Found the details input holder..");
-  	    		 driver.findElement(By.xpath("//textarea[contains(@class, 'details-input form-control input-sm')]")).sendKeys("Sample Replay recording for Dynamics Ticket UI.");
-  	    		Thread.sleep(3000); 
-	    	   }
-	    	   
-	    	   //Email
-	    	   if(driver.findElement(By.xpath("//input[contains(@class, 'email-input form-control input-sm')]")).isDisplayed()){
-  	    		 System.out.println("Found the email input holder..");
-  	    		 driver.findElement(By.xpath("//input[contains(@class, 'email-input form-control input-sm')]")).sendKeys("jone@email.com");
-  	    		Thread.sleep(3000); 
-	    	   }
 	    	   
 	    	  // WebElement previewbuttonAppears = driver.findElement(By.cssSelector("button[class='btn btn-xs btn-primary btnPreviewVideo']"));
 	    	   System.out.println("renderingProgress in progress..");
@@ -273,7 +255,7 @@ public class MicroSoftDynamicsTickectUITS {
      	    		while(!rendFinish){
      	    			
      	    			progressBar = renderingProgress.getText();
-     	    			System.out.println("renderingProgress text is --> "+progressBar);
+     	    			//System.out.println("renderingProgress text is --> "+progressBar);
      	    			//Thread.sleep(1000);      	    			
      	    			if(progressBar.equalsIgnoreCase("97% rendered") || progressBar.equalsIgnoreCase("98% rendered") || progressBar.equalsIgnoreCase("99% rendered")){
      	    				
@@ -288,15 +270,6 @@ public class MicroSoftDynamicsTickectUITS {
      	    					
      	    					
      	    				}
-     	    				if(driver.findElement(By.linkText("Submit Ticket")).isDisplayed()){
-     	    					System.out.println("Submit button enabled..");
-     	    					//rendFinish = true;
-     	    					//submitBtnAppears = true;
-     	    					//break;
-     	    					
-     	    				}
-     	    				
-     	    				
      	    				
      	    			}
      	    		}
@@ -309,16 +282,13 @@ public class MicroSoftDynamicsTickectUITS {
      	    	}
      	    	
      	    	if(submitBtnAppears){
-     	    		System.out.println("Submit button enabled..");
+     	    		System.out.println("save and submit button enabled..");
       	    		Thread.sleep(1000);
       	    		//Thread.sleep(3000);
-      	    		driver.findElement(By.linkText("Submit Ticket")).click();
+      	    		driver.findElement(By.linkText("Save Draft Article")).click();
       	    		
       	    	}
-      	    	Thread.sleep(9000);
-      	    	Thread.sleep(3000);
-      	    	Thread.sleep(3000);
-      	    	
+      	    	Thread.sleep(15000);      	    	
       	    	System.out.println("Submitted dialog box appears..");
       	    	Robot submittedDialogBox = new Robot();
       	    	submittedDialogBox.keyPress(KeyEvent.VK_ENTER);

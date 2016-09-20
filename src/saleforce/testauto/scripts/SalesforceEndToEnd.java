@@ -7,8 +7,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ ValidateSalesforceIntegrationTC.class,RecordSalesforceTicketTC.class,
-		VerifyTicketAtSalesforceInbox.class })
-public class SalesforceAutoTestScript {
+		VerifyTicketAtSalesforce.class })
+public class SalesforceEndToEnd {
 	public static void main(String[] args) throws Exception {                    
 	       /*JUnitCore.main(
 	         "com.stackoverflow.MyTestSuite");  */   

@@ -17,7 +17,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class VerifyTicketAtSalesforceInbox {
+public class VerifyTicketAtSalesforce {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
