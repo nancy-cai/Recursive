@@ -6,14 +6,14 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ValidateZendeskIntegrationTC.class,RecordZendeskTicketTC.class,
-		VerifyZendeskTicket.class })
+@SuiteClasses({ ValidateZendeskIntegrationTC.class, RecordZendeskTicketTC.class, VerifyZendeskTicket.class })
 public class ZendeskEndToEndTC {
-	public static void main(String[] args) throws Exception {                    
-	       /*JUnitCore.main(
-	         "com.stackoverflow.MyTestSuite");  */   
-		JUnitCore jCore = new JUnitCore();
-        jCore.run();
+	public static void main(String[] args) throws Exception {
+		JUnitCore.main("zendesk.testauto.scripts.ZendeskEndToEndTC");
+		/*
+		 * JUnitCore jCore = new JUnitCore(); jCore.run();
+		 */
+
 	}
 
 }

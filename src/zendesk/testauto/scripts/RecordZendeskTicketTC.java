@@ -18,21 +18,26 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
-import portal.testauto.scripts.WaitLoopFunction;
+import functions.TimePropertiesSetup;
+import functions.WaitLoopFunction;
 
 public class RecordZendeskTicketTC {
 	private WebDriver driver;
 	private String baseUrl;
 	private WaitLoopFunction waits;
+	public TimePropertiesSetup title;
+	public String summary;
 
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:/Selenium/Chrome/chromedriver.exe");
 		driver = new ChromeDriver();
 		waits = new WaitLoopFunction();
+		title = new TimePropertiesSetup();
+
 		driver.manage().window().maximize();
 		baseUrl = "http://testpages.clickwith.me/testpage.html";
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(80, TimeUnit.SECONDS);
 	}
 
 	@Test
@@ -73,13 +78,14 @@ public class RecordZendeskTicketTC {
 				System.out.println("tab --> " + i);
 			}
 
+			Thread.sleep(4000);
+
 			driver.switchTo().window(tabs2.get(1));
 
 			System.out.println("accept alert..");
 
 			Robot uiBtn3 = new Robot();
 			uiBtn3.mouseMove(180, 300);
-			Thread.sleep(3000);
 
 			Robot audioDialogBox = new Robot();
 			audioDialogBox.keyPress(KeyEvent.VK_ENTER);
@@ -109,7 +115,6 @@ public class RecordZendeskTicketTC {
 		driver.findElement(by4).click();
 
 		Thread.sleep(3000);
-
 		driver.switchTo().frame(driver.findElement(By.xpath("/html/body/iframe[3]")));
 		waits.waitLoop(driver, By.id("rcrsv-annotation-toolbar"));
 
@@ -182,12 +187,16 @@ public class RecordZendeskTicketTC {
 			actionStopRec.click(stopRec).build().perform();
 
 			Thread.sleep(3000);
+
 			// Summary
+			title.saveParamChanges();
+			title.readFile();
+
 			if (driver.findElement(By.xpath("//input[contains(@class, 'summary-input form-control input-sm')]"))
 					.isDisplayed()) {
 				System.out.println("Found the summary input holder..");
 				driver.findElement(By.xpath("//input[contains(@class, 'summary-input form-control input-sm')]"))
-						.sendKeys("Zendesk Ticket UI Sep22");
+						.sendKeys(title.time());
 				Thread.sleep(3000);
 			}
 			// Details
@@ -195,7 +204,7 @@ public class RecordZendeskTicketTC {
 					.isDisplayed()) {
 				System.out.println("Found the details input holder..");
 				driver.findElement(By.xpath("//textarea[contains(@class, 'details-input form-control input-sm')]"))
-						.sendKeys("Zendesk Ticket 0920.");
+						.sendKeys("Zendesk Ticket.");
 				Thread.sleep(3000);
 			}
 
@@ -280,5 +289,14 @@ public class RecordZendeskTicketTC {
 		driver.quit();
 
 	}
+
+	/*
+	 * public String summary() {
+	 * 
+	 * summary = title.currentTime(); System.out.println("Summary is " +
+	 * summary); return summary;
+	 * 
+	 * }
+	 */
 
 }

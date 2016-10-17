@@ -1,84 +1,80 @@
 package zendesk.testauto.scripts;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.awt.Robot;
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import functions.LoginFunction;
+import functions.WaitLoopFunction;
+
 public class ValidateZendeskIntegrationTC {
 	private WebDriver driver;
-	private String baseUrl;
-	private boolean acceptNextAlert = true;
+	private WaitLoopFunction waits;
+	private LoginFunction login;
+	private Properties prop;
 	private StringBuffer verificationErrors = new StringBuffer();
 
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:/Selenium/Chrome/chromedriver.exe");
 		driver = new ChromeDriver();
-		// driver = new FirefoxDriver();
+		waits = new WaitLoopFunction();
+		login = new LoginFunction();
+		prop = new Properties();
+		prop.load(new FileInputStream("./SharedUIMap/SharedUIMap.properties"));
+		driver.get(prop.getProperty("base_url"));
 		driver.manage().window().maximize();
-		baseUrl = "https://portal-staging.rcrsv.io/login";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testValidateSalesforceIntegrationTC() throws Exception {
-		driver.get(baseUrl);
-		driver.findElement(By.id("email")).clear();
-		driver.findElement(By.id("email")).sendKeys("chintan.patel@adactin.com");
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("Adactin123");
-		driver.findElement(By.cssSelector("button[type=\"submit\"]")).submit();
+	public void testValidateZendeskIntegrationTC() throws Exception {
+		login.Login(driver);
+
+		waits.waitLoop(driver, By.className(prop.getProperty("List_Manage_Organisation")));
+		System.out.println("Manage Integrations Tab Location --> "
+				+ driver.findElement(By.className(prop.getProperty("List_Manage_Organisation"))).getLocation());
+
 		Robot uiBtn = new Robot();
+		uiBtn.mouseMove(0, 386);
+		Thread.sleep(2000);
+		Actions builder = new Actions(driver);
 
-		// mouse over "Manage Integrations"
-		uiBtn.mouseMove(2180, 808);
+		builder.moveToElement(driver.findElement(By.className(prop.getProperty("List_Manage_Organisation")))).build()
+				.perform();
+		builder.click(driver.findElement(By.className(prop.getProperty("List_Manage_Organisation")))).build().perform();
 
-		if (driver.findElement(By.className("main-nav--collapsible ")).isDisplayed()) {
+		waits.waitLoop(driver, By.xpath(prop.getProperty("Link_Integration")));
+		System.out.println("Manage Organisation Hovered! Displaying sub menus");
+		WebElement subMenuInt = driver.findElement(By.xpath(prop.getProperty("Link_Integration")));
 
-			System.out.println("Manage Integrations Tab Location --> "
-					+ driver.findElement(By.className("main-nav--collapsible ")).getLocation());
+		Actions action2 = new Actions(driver);
+		action2.click(subMenuInt).build().perform();
+		Thread.sleep(2000);
 
-			Actions builder = new Actions(driver);
+		waits.waitLoop(driver, By.xpath("/html/body/div[2]/section/div/div/div/article/div/div[4]/a/p"));
+		System.out.println("Listing all Integrations..");
 
-			builder.moveToElement(driver.findElement(By.className("main-nav--collapsible "))).build().perform();
-		}
+		WebElement integrationDynamics = driver
+				.findElement(By.xpath("/html/body/div[2]/section/div/div/div/article/div/div[4]/a/p"));
 
+		Actions action3 = new Actions(driver);
+		action3.click(integrationDynamics).build().perform();
 		Thread.sleep(3000);
-
-		if (driver.findElement(By.xpath("/html/body/div[2]/aside/ul/li[6]/ul/li[1]/a/span")).isDisplayed()) {
-			System.out.println("Manage Integrations Hovered! Displaying sub menus");
-			WebElement subMenuInt = driver.findElement(By.xpath("/html/body/div[2]/aside/ul/li[6]/ul/li[1]/a/span"));
-
-			Actions action2 = new Actions(driver);
-			action2.click(subMenuInt).build().perform();
-			Thread.sleep(3000);
-		}
-		Thread.sleep(3000);
-
-		if (driver.findElement(By.xpath("/html/body/div[2]/section/div/div/div/article/div/div[4]/a/p"))
-				.isDisplayed()) {
-			System.out.println("Listing all Integrations..");
-			WebElement integrationZendesk = driver
-					.findElement(By.xpath("/html/body/div[2]/section/div/div/div/article/div/div[4]/a/p"));
-
-			Actions action3 = new Actions(driver);
-			action3.click(integrationZendesk).build().perform();
-			Thread.sleep(3000);
-
-		}
+		verifyUnlinkExists();
 
 	}
 
@@ -92,37 +88,12 @@ public class ValidateZendeskIntegrationTC {
 		}
 	}
 
-	private boolean isElementPresent(By by) {
-		try {
-			driver.findElement(by);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-	}
-
-	private boolean isAlertPresent() {
-		try {
-			driver.switchTo().alert();
-			return true;
-		} catch (NoAlertPresentException e) {
-			return false;
-		}
-	}
-
-	private String closeAlertAndGetItsText() {
-		try {
-			Alert alert = driver.switchTo().alert();
-			String alertText = alert.getText();
-			if (acceptNextAlert) {
-				alert.accept();
-			} else {
-				alert.dismiss();
-			}
-			return alertText;
-		} finally {
-			acceptNextAlert = true;
-		}
+	public void verifyUnlinkExists() {
+		WebElement unlink = driver
+				.findElement(By.cssSelector("body > div.wrapper > section > div > div.row > div > article > div > a"));
+		String expectedLink = "Unlink Account";
+		String actualLink = unlink.getText();
+		assertEquals(expectedLink, actualLink);
 	}
 
 }
