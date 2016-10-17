@@ -2,6 +2,8 @@ package portal.testauto.scripts;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
@@ -14,13 +16,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import functions.DataFileLoad;
+import functions.LoginFunction;
+import functions.WaitLoopFunction;
+
 public class BuyMinutesHappyCase {
 	private WebDriver driver;
 	private WaitLoopFunction waits;
-	private String baseUrl;
-	private WebElement email;
-	private WebElement password;
-	private WebElement login;
+	private LoginFunction login;
+	private Properties prop;
 	private WebElement sideMenu;
 	private WebElement buyMin;
 	private WebElement minutes;
@@ -33,26 +37,28 @@ public class BuyMinutesHappyCase {
 	private String expectedSuccessMsg;
 	private String actualSuccessMsg;
 	public WebElement checkoutButton;
+	private DataFileLoad file;
+	private String minToBuy;
+	private String strfilepath;
 
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:/Selenium/Chrome/chromedriver.exe");
 		driver = new ChromeDriver();
-		baseUrl = "https://portal-staging.rcrsv.io/login";
-		driver.get(baseUrl);
+		login = new LoginFunction();
+		waits = new WaitLoopFunction();
+		file = new DataFileLoad();
+		prop = new Properties();
+		prop.load(new FileInputStream("./SharedUIMap/SharedUIMap.properties"));
+		driver.get(prop.getProperty("base_url"));
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
 	public void buyMinutes() throws Exception {
-		waits = new WaitLoopFunction();
-		enterEmail();
-		enterPassword();
-		clickLogin();
-		waits.waitLoop(driver, By.className("main-nav__link "));
+		login.Login(driver);
 		hoverSideMenu();
-		waits.waitLoop(driver, By.xpath("/html/body/div[2]/aside/ul/li[5]/a"));
 		clickBuyMoreMinute();
 		min = 1;
 		enterMinutesToBuy();
@@ -61,8 +67,6 @@ public class BuyMinutesHappyCase {
 		getExpectedTotalPrice();
 		checkTotalPrice();
 		hoverAddToCart();
-		waits.waitLoop(driver,
-				By.xpath("html/body/div[2]/section/div/div/div/div/div/article/div/table/tbody/tr[2]/td[6]/button"));
 		clickAddToCart();
 		assertSuccessMessage();
 	}
@@ -73,40 +77,26 @@ public class BuyMinutesHappyCase {
 		driver.quit();
 	}
 
-	private void enterEmail() {
-		email = driver.findElement(By.id("email"));
-		email.clear();
-		email.sendKeys("chintan.patel@adactin.com");
-	}
-
-	private void enterPassword() {
-		password = driver.findElement(By.id("password"));
-		password.clear();
-		password.sendKeys("Adactin123");
-	}
-
-	private void clickLogin() {
-		login = driver.findElement(By.xpath("//button[@type='submit']"));
-		login.click();
-
-	}
-
-	private void hoverSideMenu() {
+	private void hoverSideMenu() throws Exception {
+		waits.waitLoop(driver, By.className("main-nav__link "));
 		Actions builder = new Actions(driver);
 		sideMenu = driver.findElement(By.className("main-nav__link "));
 		builder.moveToElement(sideMenu).build().perform();
 	}
 
-	private void clickBuyMoreMinute() {
-
+	private void clickBuyMoreMinute() throws Exception {
+		waits.waitLoop(driver, By.xpath("/html/body/div[2]/aside/ul/li[5]/a"));
 		buyMin = driver.findElement(By.xpath("/html/body/div[2]/aside/ul/li[5]/a"));
 		buyMin.click();
 	}
 
 	private void enterMinutesToBuy() {
+		strfilepath = "./Datapool/RecursiveData.xls";
+		minToBuy = file.HA_GF_readXL(1, "MinutesToBuy", strfilepath);
+		min = Integer.parseInt(minToBuy);
 		minutes = driver.findElement(By.id("customMinutesInput"));
 		minutes.clear();
-		minutes.sendKeys(Integer.toString(min));
+		minutes.sendKeys(minToBuy);
 	}
 
 	private void pressEnter() {
@@ -143,8 +133,9 @@ public class BuyMinutesHappyCase {
 		builder1.moveToElement(addToCart).build().perform();
 	}
 
-	private void clickAddToCart() throws InterruptedException {
-
+	private void clickAddToCart() throws Exception {
+		waits.waitLoop(driver,
+				By.xpath("html/body/div[2]/section/div/div/div/div/div/article/div/table/tbody/tr[2]/td[6]/button"));
 		addToCart.click();
 		Thread.sleep(3000);
 	}

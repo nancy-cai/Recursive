@@ -2,6 +2,8 @@ package portal.testauto.scripts;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
@@ -14,13 +16,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import functions.DataFileLoad;
+import functions.LoginFunction;
+import functions.WaitLoopFunction;
+
 public class BuyMinutesNegativeCase {
 	private WebDriver driver;
 	private WaitLoopFunction waits;
-	private String baseUrl;
-	private WebElement email;
-	private WebElement password;
-	private WebElement login;
+	private LoginFunction login;
+	private Properties prop;
 	private WebElement sideMenu;
 	private WebElement buyMin;
 	private WebElement minutes;
@@ -28,56 +32,42 @@ public class BuyMinutesNegativeCase {
 	private WebElement errorMsg;
 	private String expectedErrorMsg;
 	private String actualErrorMsg;
-	public WebElement checkoutButton;
+	private DataFileLoad file;
+	private String strfilepath;
 
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:/Selenium/Chrome/chromedriver.exe");
 		driver = new ChromeDriver();
-		baseUrl = "https://portal-staging.rcrsv.io/login";
-		driver.get(baseUrl);
+		login = new LoginFunction();
+		waits = new WaitLoopFunction();
+		file = new DataFileLoad();
+		prop = new Properties();
+		prop.load(new FileInputStream("./SharedUIMap/SharedUIMap.properties"));
+		driver.get(prop.getProperty("base_url"));
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
 	public void buyMinutes() throws Exception {
-		waits = new WaitLoopFunction();
-		enterEmail();
-		enterPassword();
-		clickLogin();
+
+		login.Login(driver);
 		hoverSideMenu();
 		clickBuyMoreMinute();
-		enterMinutesToBuy(0);
-		pressEnter();
-		hoverAddToCart();
-		clickAddToCart();
-		assertErrorMessage();
+		for (int i = 2; i < 4; i++) {
+			enterMinutesToBuy(i);
+			pressEnter();
+			hoverAddToCart();
+			clickAddToCart();
+			assertErrorMessage();
+		}
 	}
 
 	@After
 	public void close() throws Exception {
 
 		driver.quit();
-	}
-
-	private void enterEmail() {
-		email = driver.findElement(By.id("email"));
-		email.clear();
-		email.sendKeys("chintan.patel@adactin.com");
-	}
-
-	private void enterPassword() {
-		password = driver.findElement(By.id("password"));
-		password.clear();
-		password.sendKeys("Adactin123");
-	}
-
-	private void clickLogin() {
-
-		login = driver.findElement(By.xpath("//button[@type='submit']"));
-		login.click();
-
 	}
 
 	private void hoverSideMenu() throws Exception {
@@ -93,10 +83,12 @@ public class BuyMinutesNegativeCase {
 		buyMin.click();
 	}
 
-	private void enterMinutesToBuy(Integer min) {
+	private void enterMinutesToBuy(int index) {
+		strfilepath = "./Datapool/RecursiveData.xls";
+		String minToBuy = file.HA_GF_readXL(index, "MinutesToBuy", strfilepath);
 		minutes = driver.findElement(By.id("customMinutesInput"));
 		minutes.clear();
-		minutes.sendKeys(Integer.toString(min));
+		minutes.sendKeys(minToBuy);
 	}
 
 	private void pressEnter() {
@@ -115,11 +107,12 @@ public class BuyMinutesNegativeCase {
 			waits.waitLoop(driver, By
 					.xpath("html/body/div[2]/section/div/div/div/div/div/article/div/table/tbody/tr[2]/td[6]/button"));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 
 		addToCart.click();
+		System.out.println("Added!");
 		Thread.sleep(3000);
 	}
 
